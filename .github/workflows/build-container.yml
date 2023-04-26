@@ -44,7 +44,8 @@ jobs:
           maxsplit: -1
 
       - name: Set Image
-        run: export IMAGE_NAME=${{ github.repository }}-${{ steps.branch.outputs._1 }}
+        run: |
+          export IMAGE_NAME=${{ github.repository }}-${{ steps.branch.outputs._1 }}
 
 
       - name: Set up JDK 20
