@@ -1,10 +1,12 @@
 name: java CI
 
+run-name: ${{ github.actor }}
+
 on:
   push:
-    branches: [ "feature"]
+    branches: [ "feature/*"]
   pull_request:
-    branches: [ "all" ]
+    branches: [ "master|develop|feature/*" ]
 
 jobs:
   build:
@@ -17,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '20'
-          distribution: 'openjdk'
+          distribution: 'oracle'
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
