@@ -6,7 +6,7 @@ on:
   push:
     branches: [ "feature/*"]
   pull_request:
-    branches: [ "all" ]
+    branches: [ "master|develop|feature/*" ]
 
 jobs:
   build:
