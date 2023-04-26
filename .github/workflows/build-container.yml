@@ -46,7 +46,7 @@ jobs:
       - name: Set Image
         id: image_name
         run: |
-          echo "::set-output name=fragment::${{ github.repository }}-${{ steps.branch.outputs._1 }}"
+          echo "::set-output name=fragment::${{ github.repository }}-${{ steps.branch.outputs._1 || steps.branch.outputs._0 }}"
 
 
       - name: Set up JDK 20
