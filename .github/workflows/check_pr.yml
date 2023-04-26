@@ -1,0 +1,21 @@
+name: java CI
+
+run-name: ${{ github.actor }}
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
+        with:
+          java-version: '20'
+          distribution: 'oracle'
+
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots clean package
