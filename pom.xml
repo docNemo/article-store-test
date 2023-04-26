@@ -57,6 +57,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>${project.artifactId}</finalName>
+					<mainClass>ru.mai.articlestore.ArticleStoreApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
