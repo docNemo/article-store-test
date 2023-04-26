@@ -6,7 +6,6 @@ import ru.mai.articlestore.dto.request.stub.StubRequest;
 import ru.mai.articlestore.dto.response.stub.StubResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class StubServiceTest {
     private final static String NAME = "Ivan";
@@ -16,6 +15,7 @@ public class StubServiceTest {
 
     private StubRequest stubRequest;
     private StubResponse expectedStubResponse;
+
     @BeforeEach
     void setup() {
         stubRequest = new StubRequest(NAME);
