@@ -1,8 +1,10 @@
 name: java CI
 
+run-name: ${{ github.actor }}
+
 on:
   push:
-    branches: [ "feature"]
+    branches: [ "feature/*"]
   pull_request:
     branches: [ "all" ]
 
