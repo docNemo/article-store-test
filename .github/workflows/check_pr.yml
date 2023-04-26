@@ -2,11 +2,7 @@ name: java CI
 
 run-name: ${{ github.actor }}
 
-on:
-  push:
-    branches: [ "feature/*"]
-  pull_request:
-    branches: [ "master|develop|feature/*" ]
+on: [ push ]
 
 jobs:
   build:
