@@ -64,7 +64,9 @@ jobs:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
 
       - name: Add os host to resolv.conf
-        run: sudo echo "${{ secrets.OPENSHIFT_SERVER }} ${{ secrets.OPENSHIFT_SERVER_IP }}" | sudo tee -a /etc/resolv.conf
+        run: |
+          sudo echo "${{ secrets.OPENSHIFT_SERVER }} ${{ secrets.OPENSHIFT_SERVER_IP }}" | sudo tee -a /etc/resolv.conf
+          cat /etc/resolv.conf
 
       - name: ping host
         shell: bash
