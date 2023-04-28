@@ -63,15 +63,13 @@ jobs:
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
 
-      - name: ZeroTier allow dns
-        run: sudo zerotier-cli set 3efa5cb78a6e9d37 allowDNS=1
-
       - name: ZT allowDefault
-        run: sleep 10
+        run: echo "${{ secrets.OPENSHIFT_SERVER }} ${{ secrets.OPENSHIFT_SERVER_IP }}"
+
       #          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
       # https://github.com/redhat-actions/oc-login#readme
       - name: Log in to OpenShift
-        run: oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://api.os-lab-1.neo:6443
+        run: oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://${{ secrets.OPENSHIFT_SERVER }}:6443
 
       - name: Logout from OpenShift
         run: oc whoami
