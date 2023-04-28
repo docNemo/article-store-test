@@ -65,14 +65,14 @@ jobs:
 
       - name: Add os host to resolv.conf
         run: |
-          sudo echo "api.os-lab-1.neo 10.147.18.78" | sudo tee -a /etc/resolv.conf
+          sudo echo "${{ secrets.OPENSHIFT_SERVER }} ${{ secrets.OPENSHIFT_SERVER_IP }}" | sudo tee -a /etc/resolv.conf
           cat /etc/resolv.conf
 
       - name: ping host
         shell: bash
         run: |
           count=10
-          while ! ping -c 1 ${{ secrets.OPENSHIFT_SERVER_IP }} ; do
+          while ! ping -c 1 ${{ secrets.OPENSHIFT_SERVER }} ; do
             echo "waiting..." ;
             sleep 1 ;
             let count=count-1
