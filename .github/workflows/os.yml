@@ -62,7 +62,8 @@ jobs:
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
-#          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+        run: sudo zerotier-cli set 3efa5cb78a6e9d37 allowDNS=1
+      #          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
       # https://github.com/redhat-actions/oc-login#readme
       - name: Log in to OpenShift
         run: oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=${{ secrets.OPENSHIFT_SERVER }}
