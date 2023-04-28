@@ -12,7 +12,6 @@ on:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
-    types: ["opened", "reopened", "edited"]
     branches: [ "master", "develop", "feature/*" ]
 
 env:
