@@ -85,8 +85,7 @@ jobs:
       # https://github.com/redhat-actions/oc-login#readme
       - name: Log in to OpenShift
         run: |
-          GODEBUG="x509ignoreCN=0"
-          oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://${{ secrets.OPENSHIFT_SERVER }}:6443
+          oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://${{ secrets.OPENSHIFT_SERVER }}:6443 --insecure-skip-tls-verify
 
       - name: Logout from OpenShift
         run: oc whoami
