@@ -64,7 +64,7 @@ jobs:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
 
       - name: ZT allowDefault
-        run: sudo echo "${{ secrets.OPENSHIFT_SERVER }} ${{ secrets.OPENSHIFT_SERVER_IP }}" >> /etc/resolv.conf
+        run: sudo echo "${{ secrets.OPENSHIFT_SERVER }} ${{ secrets.OPENSHIFT_SERVER_IP }}" | sudo tee -a /etc/resolv.conf
 
       #          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
       # https://github.com/redhat-actions/oc-login#readme
