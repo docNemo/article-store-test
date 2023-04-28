@@ -73,7 +73,7 @@ jobs:
         shell: bash
         run: |
           count=10
-          while ! ping -c 1 ${{ secrets.OPENSHIFT_SERVER }} ; do
+          while ! ping -c 1 https://api.os-lab-1.neo:6443 ; do
             echo "waiting..." ;
             sleep 1 ;
             let count=count-1
