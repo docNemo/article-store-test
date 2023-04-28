@@ -82,7 +82,7 @@ jobs:
       #          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
       # https://github.com/redhat-actions/oc-login#readme
       - name: Log in to OpenShift
-        run: oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=${{ secrets.OPENSHIFT_SERVER }}
+        run: oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://api.os-lab-1.neo:6443
 
       - name: Logout from OpenShift
         run: oc whoami
