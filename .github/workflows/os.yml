@@ -1,38 +1,10 @@
-# ℹ️ Configure your repository and the workflow with the following steps:
-# 1. Have access to an OpenShift cluster. Refer to https://www.openshift.com/try
-# 2. Create the OPENSHIFT_SERVER and OPENSHIFT_TOKEN repository secrets. Refer to:
-#   - https://github.com/redhat-actions/oc-login#readme
-#   - https://docs.github.com/en/actions/reference/encrypted-secrets
-#   - https://cli.github.com/manual/gh_secret_set
-# 3. (Optional) Edit the top-level 'env' section as marked with '🖊️' if the defaults are not suitable for your project.
-# 4. (Optional) Edit the build-image step to build your project.
-#    The default build type is by using a Dockerfile at the root of the repository,
-#    but can be replaced with a different file, a source-to-image build, or a step-by-step buildah build.
-# 5. Commit and push the workflow file to your default branch to trigger a workflow run.
-
-# 👋 Visit our GitHub organization at https://github.com/redhat-actions/ to see our actions and provide feedback.
-
 name: OpenShift
 
 env:
-  # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
-  # See https://github.com/redhat-actions/oc-login#readme for how to retrieve these values.
-  # To get a permanent token, refer to https://github.com/redhat-actions/oc-login/wiki/Using-a-Service-Account-for-GitHub-Actions
-  OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
-  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-  # 🖊️ EDIT to set the kube context's namespace after login. Leave blank to use your user's default namespace.
   OPENSHIFT_NAMESPACE: "article-store-test"
-
-  # 🖊️ EDIT to set a name for your OpenShift app, or a default one will be generated below.
-  APP_NAME: "article-store-test"
-
-  # 🖊️ EDIT with the port your application should be accessible on.
-  # If the container image exposes *exactly one* port, this can be left blank.
-  # Refer to the 'port' input of https://github.com/redhat-actions/oc-new-app
+  APP_NAME: "arachni-"
   APP_PORT: "8080"
 
-  # 🖊️ EDIT to change the image registry settings.
-  # Registries such as GHCR, Quay.io, and Docker Hub are supported.
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
   IMAGE_REGISTRY_USER: ${{ github.actor }}
   IMAGE_REGISTRY_PASSWORD: ${{ github.token }}
@@ -68,21 +40,7 @@ jobs:
           sudo mv /etc/resolv.conf /etc/resolv1.conf
           cat /etc/resolv1.conf | sudo tee -a /etc/resolv.conf
           echo "nameserver ${{ secrets.OPENSHIFT_SERVER_IP }}" | sudo tee -a /etc/resolv.conf
-          cat /etc/resolv.conf
 
-      - name: ping host
-        shell: bash
-        run: |
-          count=10
-          while ! ping -c 1 ${{ secrets.OPENSHIFT_SERVER }} ; do
-            echo "waiting..." ;
-            sleep 1 ;
-            let count=count-1
-          done
-          echo "ping success"
-
-      #          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
-      # https://github.com/redhat-actions/oc-login#readme
       - name: Log in to OpenShift
         run: |
           oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://${{ secrets.OPENSHIFT_SERVER }}:6443 --insecure-skip-tls-verify
