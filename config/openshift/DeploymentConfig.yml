@@ -105,13 +105,17 @@ parameters:
     required: true
   - name:   HOST_PORT
     required: true
-  - name:   LIMITS_CPU
-    required: true
-  - name:   LIMITS_MEMORY
-    required: true
-  - name:   REQUESTS_CPU
-    required: true
-  - name:   REQUESTS_MEMORY
-    required: true
   - name:   OS_ROUTE
     required: true
+  - name:   LIMITS_CPU
+    required: true
+    value: 1
+  - name:   LIMITS_MEMORY
+    required: true
+    value: 250m
+  - name:   REQUESTS_CPU
+    required: true
+    value: 1
+  - name:   REQUESTS_MEMORY
+    required: true
+    value: 250m
