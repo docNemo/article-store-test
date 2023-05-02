@@ -43,6 +43,15 @@ jobs:
           separator: "/"
           maxsplit: -1
 
+      - name: Prepare image name
+        id: prepare-image-name
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ env.IMAGE_NAME }}
+
+      - name: Prepare image name
+        run: echo "IMAGE_NAME=${{ steps.prepare-image-name.outputs.lowercase }}" >> $GITHUB_ENV
+
       - name: Prepare tags
         id: meta
         run: |
