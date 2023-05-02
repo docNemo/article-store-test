@@ -55,7 +55,7 @@ jobs:
       - name: Prepare tags
         id: meta
         run: |
-          echo "::set-output name=version::${{ env.IMAGE_NAME }}:${{ steps.branch.outputs._1 || steps.branch.outputs._0 }}"
+          echo "::set-output name=version::${{ steps.branch.outputs._1 || steps.branch.outputs._0 }}"
           echo "::set-output name=tags::${{ env.IMAGE_NAME }}:${{ steps.branch.outputs._1 || steps.branch.outputs._0 }}"
 
 
