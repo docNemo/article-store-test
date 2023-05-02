@@ -12,8 +12,15 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+
   DOCKERFILE: "Dockerfile"
+  IMAGE_NAME: ${{ github.repository }}
+
+  APPLICATION_NAME: "article-store-test"
+  OS_PROJECT: "article-store-test"
+  APP_TEMPLATE: "DeploymentConfig.yml"
+  HOST_PORT: "8080"
+  OS_ROUTE: "apps.os-lab-1.neo"
 
 jobs:
   build:
@@ -34,7 +41,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-#        BUILD JAR
+#       BUILD JAR
       - name: Set up JDK 20
         uses: actions/setup-java@v3
         with:
@@ -43,7 +50,8 @@ jobs:
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
-#         BUILD DOCKER CONTAINER
+
+#       BUILD DOCKER CONTAINER
       - name: Prepare branch name
         uses: jungwinter/split@master
         id: branch
@@ -67,9 +75,6 @@ jobs:
           echo "::set-output name=version::${{ steps.branch.outputs._1 || steps.branch.outputs._0 }}"
           echo "::set-output name=tags::${{ env.IMAGE_NAME }}:${{ steps.branch.outputs._1 || steps.branch.outputs._0 }}"
 
-#      - name: Setup Docker
-#        uses: docker/setup-buildx-action@79abd3f86f79a9d68a23c75a09a9a85889262adf
-
       - name: Log into registry ${{ env.REGISTRY }}
         run: docker login ${{ env.REGISTRY }} --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
 
@@ -80,3 +85,41 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ steps.meta.outputs.tags }}
           clear_sha=$(docker images --digests | grep ${{ steps.meta.outputs.version }} | awk '{print $3}')
           echo "::set-output name=sha::$clear_sha"
+
+#       DEPLOY
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: 4
+
+      - name: Add OS host to resolv.conf
+        run: |
+          sudo mv /etc/resolv.conf /etc/resolv1.conf
+          cat /etc/resolv1.conf | sudo tee -a /etc/resolv.conf
+          echo "nameserver ${{ secrets.OPENSHIFT_SERVER_IP }}" | sudo tee -a /etc/resolv.conf
+
+      - name: Log in to OpenShift
+        run: |
+          oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://${{ secrets.OPENSHIFT_SERVER }}:6443 --insecure-skip-tls-verify
+          oc project ${{ env.OS_PROJECT }}
+
+      - name: Logout from OpenShift
+        run: oc whoami
+
+      - name: Deploy to OS
+        run: |
+          oc process -f config/openshift/${{ env.APP_TEMPLATE }} \
+          -p APPLICATION_NAME=${{ env.APPLICATION_NAME }}-${{ steps.meta.outputs.version }} \
+          -p HOST_PORT=${{ env.HOST_PORT }} \
+          -p IMAGE=${{ env.IMAGE_NAME }} \
+          -p IMAGE_SHA=${{ steps.build-and-push.outputs.sha }} \
+          -p OS_ROUTE=${{ env.OS_ROUTE }} | oc apply -f -
+
+      - name: Logout from OpenShift
+        run: oc logout
+
