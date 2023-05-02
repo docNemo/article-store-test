@@ -114,7 +114,7 @@ jobs:
           oc process -f config/openshift/${{ env.APP_TEMPLATE }} \
           -p APPLICATION_NAME=${{ env.APPLICATION_NAME }}-${{ steps.meta.outputs.version }} \
           -p HOST_PORT=${{ env.HOST_PORT }} \
-          -p IMAGE=${{ env.IMAGE_NAME }} \
+          -p IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} \
           -p IMAGE_SHA=${{ steps.build-and-push.outputs.sha }} \
           -p OS_ROUTE=${{ env.OS_ROUTE }} | oc apply -f -
 
