@@ -77,7 +77,7 @@ jobs:
       - name: Build and push Docker image
         id: build-and-push
         run: |
-          docker build --tag ${{ steps.meta.outputs.tags }} . -f ${{ env.DOCKERFILE }}
+          docker build --tag ${{ env.REGISTRY }}/${{ steps.meta.outputs.tags }} . -f ${{ env.DOCKERFILE }}
           docker push ${{ env.REGISTRY }}/${{ steps.meta.outputs.tags }}
 #          docker images --digests | grep $ {{ steps.meta.outputs.version }} | awk '::set-output name=sha::print \$3'
 
