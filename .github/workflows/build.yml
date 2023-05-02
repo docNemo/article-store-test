@@ -34,9 +34,7 @@ jobs:
     steps:
       - name: Print env
         run: |
-          echo "${{ env.REGISTRY }}"
-          echo "${{ env.IMAGE_NAME }}"
-          echo "${{ env.DOCKERFILE }}"
+          echo "$GITHUB_CONTEXT"
 
       - name: Checkout repository
         uses: actions/checkout@v3
