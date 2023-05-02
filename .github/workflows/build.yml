@@ -12,7 +12,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}.toLowerCase()
+  IMAGE_NAME: ${{ github.repository }}
   DOCKERFILE: "Dockerfile"
 
 
