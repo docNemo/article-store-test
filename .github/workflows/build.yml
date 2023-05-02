@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   schedule:
@@ -23,7 +23,7 @@ env:
   OS_ROUTE: "apps.os-lab-1.neo"
 
 jobs:
-  build:
+  build-and-deploy:
 
     runs-on: ubuntu-latest
     permissions:
