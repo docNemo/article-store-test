@@ -31,11 +31,11 @@ objects:
         deploymentConfig: ${APPLICATION_NAME}
       template:
         metadata:
-          annotations:
-            openshift.io/generated-by: OpenShiftWebConsole
-            labels:
-              app: ${APPLICATION_NAME}
-              deploymentConfig: ${APPLICATION_NAME}
+#          annotations:
+#            openshift.io/generated-by: OpenShiftWebConsole
+          labels:
+            app: ${APPLICATION_NAME}
+            deploymentConfig: ${APPLICATION_NAME}
         spec:
           restartPolicy: Always
           serviceAccountName: builder
