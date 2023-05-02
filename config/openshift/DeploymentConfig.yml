@@ -59,6 +59,8 @@ objects:
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               env:
+                - name: APPLICATION_NAME
+                  value: ${APPLICATION_NAME}
                 - name: JAVA_OPTS
                   value: ''
 
