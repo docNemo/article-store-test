@@ -32,6 +32,7 @@ objects:
       template:
         metadata:
           annotations:
+            openshift.io/generated-by: OpenShiftWebConsole
             labels:
               app: ${APPLICATION_NAME}
               deploymentConfig: ${APPLICATION_NAME}
