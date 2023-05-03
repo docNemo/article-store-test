@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   pull_request:
-    branches: [ "release", "feature/*" ]
+    branches: [ "master", "develop" ]
     types: [ closed ]
 
 env:
@@ -10,6 +10,7 @@ env:
 
 jobs:
   clean-os:
+    if: github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -51,15 +52,9 @@ jobs:
 
       - run: oc whoami
 
-      - name: Deploy to OS
+      - name: Delete
         run: |
-          oc process -f config/openshift/${{ env.APP_TEMPLATE }} \
-          -p APPLICATION_NAME=${{ env.APPLICATION_NAME }}-${{ steps.meta.outputs.version }} \
-          -p HOST_PORT=${{ env.HOST_PORT }} \
-          -p IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} \
-          -p IMAGE_SHA=${{ steps.build-and-push.outputs.sha }} \
-          -p OS_ROUTE=${{ env.OS_ROUTE }} | oc apply -f -
+          oc delete all -l app=${{ env.APPLICATION_NAME }}-${{ steps.meta.outputs.version }}
 
       - name: Logout from OpenShift
         run: oc logout
-
