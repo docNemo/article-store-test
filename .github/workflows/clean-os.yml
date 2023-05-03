@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Clean OS
 
 on:
   pull_request:
