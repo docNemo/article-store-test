@@ -1,14 +1,10 @@
 name: Build and Deploy
 
 on:
-  schedule:
-    - cron: '34 21 * * *'
-  push:
-    branches: [ "master", "develop", "feature/*" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
-#  pull_request:
+#  push:
 #    branches: [ "master", "develop", "feature/*" ]
+  pull_request:
+    branches: [ "master", "develop", "feature/*" ]
 
 env:
   REGISTRY: ghcr.io
@@ -106,8 +102,7 @@ jobs:
           oc login -u ${{ secrets.LOGIN_OS }} -p ${{ secrets.PASSWORD_OS }} --server=https://${{ secrets.OPENSHIFT_SERVER }}:6443 --insecure-skip-tls-verify
           oc project ${{ env.OS_PROJECT }}
 
-      - name: Logout from OpenShift
-        run: oc whoami
+      - run: oc whoami
 
       - name: Deploy to OS
         run: |
