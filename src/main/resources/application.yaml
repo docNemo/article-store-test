@@ -3,4 +3,15 @@ server:
   servlet:
     context-path: /api
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info'
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: 'true'
+    path: '/swagger-ui'
+
 helloPattern: "Hello, %s!"
