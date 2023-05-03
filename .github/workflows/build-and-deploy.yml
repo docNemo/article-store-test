@@ -1,11 +1,9 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches: [ "master", "develop", "release" ]
   pull_request:
     branches: [ "master", "develop", "release/**", "feature/**" ]
-
+    types: [opened, reopened, synchronize, closed]
 
 env:
   REGISTRY: ghcr.io
@@ -46,12 +44,20 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
 
-      #       BUILD DOCKER CONTAINER
-      - name: Prepare branch name
+#       BUILD DOCKER CONTAINER
+      - name: Choose source branch
+        if: github.event.pull_request.state == 'open'
+        run: echo "BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
+
+      - name: Choose target branch
+        if: github.event.pull_request.state == 'closed'
+        run: echo "BRANCH=${{ github.base_ref }}" >> $GITHUB_ENV
+
+      - name: Prepare branch name if open PR
         uses: jungwinter/split@master
         id: branch
         with:
-          msg: ${{ github.head_ref || github.ref_name }}
+          msg: ${{ env.BRANCH }}
           separator: "/"
           maxsplit: -1
 
@@ -117,3 +123,5 @@ jobs:
       - name: Logout from OpenShift
         run: oc logout
 
+      - name: Leave from Zerotier network
+        run: sudo zerotier-cli leave ${{ secrets.ZEROTIER_NETWORK_ID }}

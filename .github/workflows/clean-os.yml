@@ -10,7 +10,6 @@ env:
 
 jobs:
   clean-os:
-    if: github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -19,7 +18,7 @@ jobs:
         uses: jungwinter/split@master
         id: branch
         with:
-          msg: ${{ github.head_ref || github.ref_name }}
+          msg: ${{ github.head_ref }}
           separator: "/"
           maxsplit: -1
 
@@ -58,3 +57,6 @@ jobs:
 
       - name: Logout from OpenShift
         run: oc logout
+
+      - name: Leave from Zerotier network
+        run: sudo zerotier-cli leave ${{ secrets.ZEROTIER_NETWORK_ID }}
