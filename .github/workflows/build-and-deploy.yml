@@ -1,10 +1,12 @@
 name: Build and Deploy
 
 on:
-#  push:
-#    branches: [ "master", "develop", "feature/*" ]
+  push:
+    branches: [ "master", "develop", "release" ]
   pull_request:
-    branches: [ "master", "develop", "feature/*" ]
+    branches: [ "release", "develop", "feature/*" ]
+    types: [ opened, edited, closed, reopened ]
+
 env:
   REGISTRY: ghcr.io
 
@@ -34,7 +36,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-#       BUILD JAR
+      #       BUILD JAR
       - name: Set up JDK 20
         uses: actions/setup-java@v3
         with:
@@ -44,7 +46,7 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
 
-#       BUILD DOCKER CONTAINER
+      #       BUILD DOCKER CONTAINER
       - name: Prepare branch name
         uses: jungwinter/split@master
         id: branch
@@ -79,7 +81,7 @@ jobs:
           clear_sha=$(docker images --digests | grep ${{ steps.meta.outputs.version }} | awk '{print $3}')
           echo "::set-output name=sha::$clear_sha"
 
-#       DEPLOY
+      #       DEPLOY
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
         with:
